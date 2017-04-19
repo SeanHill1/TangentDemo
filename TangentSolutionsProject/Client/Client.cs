@@ -23,7 +23,7 @@ namespace TangentSolutionsProject.Clients
         public async Task<bool> getToken(LoginModel user)
         {
             
-            if (token != null)
+            if (this.token != null)
             {
                 return true;
             }
@@ -38,6 +38,9 @@ namespace TangentSolutionsProject.Clients
                 if (httpResponse.Content != null)
                 {
                     var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                    var response = new JavaScriptSerializer().Deserialize<TokenModel>(responseContent);
+                    this.token = response.token;
+
                     return true;
                 }
                 else throw new Exception("No response");
