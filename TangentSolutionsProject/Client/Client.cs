@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Script.Serialization;
 using TangentSolutionsProject.Models;
-
 namespace TangentSolutionsProject.Clients
 {
     public class Client
@@ -40,8 +39,40 @@ namespace TangentSolutionsProject.Clients
                     var responseContent = await httpResponse.Content.ReadAsStringAsync();
                     var response = new JavaScriptSerializer().Deserialize<TokenModel>(responseContent);
                     this.token = response.token;
-
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Token "+this.token);
                     return true;
+                }
+                else throw new Exception("No response");
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
+
+
+        public async Task<List<ProjectModel>> getProjects(string token = null)
+        {
+
+
+           
+            Uri uri = new Uri("http://projectservice.staging.tangentmicroservices.com:80/api/v1/projects/");
+            try
+            {
+               
+                var httpContent = new StringContent("", Encoding.UTF8, "application/json");
+
+                var httpResponse = await client.GetAsync(uri);
+
+                if (httpResponse.Content != null)
+                {
+                    var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                    var response = new JavaScriptSerializer().Deserialize<List<ProjectModel>>(responseContent);
+                    
+
+                    return response;
                 }
                 else throw new Exception("No response");
 
@@ -54,3 +85,4 @@ namespace TangentSolutionsProject.Clients
         }
     }
 }
+    
