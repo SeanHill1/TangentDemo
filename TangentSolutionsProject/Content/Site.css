@@ -46,6 +46,30 @@ textarea {
     max-height: 300px;
     overflow-y: scroll;
 }
+
+.clickableRow:hover{
+    background-color: orange;
+    transition: background-color 0.5s ease;
+    cursor: pointer;
+}
+
+.projectTable thead{
+    border-bottom: 1px solid black;
+}
+.projectTable{
+
+        border: 1px solid orange;
+
+}
+
+.orangeBorder{
+    border-top: 1px solid orange;
+    border-bottom: 1px solid orange;
+}
+
+.tableDiv{
+margin-bottom: 50px;
+}
 /*Responsive change stop card view*/
 @media only screen and (max-width: 900px) {
     
