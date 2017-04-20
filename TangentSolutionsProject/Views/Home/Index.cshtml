@@ -1,6 +1,23 @@
 ﻿@*Page for viewing projects and tasks*@
+@using TangentSolutionsProject.Models
 
-
+@model List<ProjectModel>
 @{
     ViewBag.Title = "Index";
 }
+
+<table>
+
+    @foreach (ProjectModel objUser in Model)
+    {
+        <tr>
+            <td>@objUser.title</td>
+            <td>@objUser.description</td>
+            <td>@objUser.start_date</td>
+            <td>@objUser.end_date</td>
+            <td>@objUser.is_billable</td>
+            <td>@objUser.is_active</td>
+            <td>@objUser.end_date</td>
+        </tr>
+    }
+</table>
