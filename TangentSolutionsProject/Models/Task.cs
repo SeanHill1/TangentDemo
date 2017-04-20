@@ -12,7 +12,7 @@ namespace TangentSolutionsProject.Models
         public DateTime due_date { get; set; }
         public string estimated_hours { get; set; }
         public int project { get; set; }
-        public ProjectModel[] project_data{ get; set; }
+        public List<ProjectModel> project_data{ get; set; }
 }
 
   

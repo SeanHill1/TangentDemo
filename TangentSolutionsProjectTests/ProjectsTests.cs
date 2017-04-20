@@ -53,10 +53,19 @@ namespace TangentSolutionsProjectTests
             Task.WaitAll(gotToken);
 
 
-           var projects = client.getProjects();
+           var projects = client.getProjects(gotToken.Result);
             Task.WaitAll(projects);
 
             Assert.IsNotNull(projects.Result);
+            Assert.IsNotNull(projects.Result[0].pk);
+            Assert.IsNotNull(projects.Result[0].title);
+            Assert.IsNotNull(projects.Result[0].is_active);
+            Assert.IsNotNull(projects.Result[0].is_billable);
+            Assert.IsNotNull(projects.Result[0].start_date);
+            Assert.IsNotNull(projects.Result[0].end_date);
+            Assert.IsNotNull(projects.Result[0].description);
+            Assert.IsNotNull(projects.Result[0].task_set);
+            Assert.IsNotNull(projects.Result[0].resource_set);
             Assert.IsTrue(true);
         }
     }

@@ -19,12 +19,12 @@ namespace TangentSolutionsProject.Clients
 
         }
         
-        public async Task<bool> getToken(LoginModel user)
+        public async Task<string> getToken(LoginModel user)
         {
             
             if (this.token != null)
             {
-                return true;
+                return this.token;
             }
             Uri uri = new Uri("http://userservice.staging.tangentmicroservices.com:80/api-token-auth/");
             try
@@ -39,8 +39,7 @@ namespace TangentSolutionsProject.Clients
                     var responseContent = await httpResponse.Content.ReadAsStringAsync();
                     var response = new JavaScriptSerializer().Deserialize<TokenModel>(responseContent);
                     this.token = response.token;
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Token "+this.token);
-                    return true;
+                    return this.token;
                 }
                 else throw new Exception("No response");
 
@@ -53,7 +52,7 @@ namespace TangentSolutionsProject.Clients
         }
 
 
-        public async Task<List<ProjectModel>> getProjects(string token = null)
+        public async Task<List<ProjectModel>> getProjects(string token)
         {
 
 
@@ -63,9 +62,9 @@ namespace TangentSolutionsProject.Clients
             {
                
                 var httpContent = new StringContent("", Encoding.UTF8, "application/json");
-
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Token " + token);
                 var httpResponse = await client.GetAsync(uri);
-
+                
                 if (httpResponse.Content != null)
                 {
                     var responseContent = await httpResponse.Content.ReadAsStringAsync();

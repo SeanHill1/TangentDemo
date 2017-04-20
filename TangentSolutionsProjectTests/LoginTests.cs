@@ -52,7 +52,7 @@ namespace TangentSolutionsProjectTests
                     });
             Task.WaitAll(result);
             
-            Assert.IsTrue(result.Result);
+            Assert.IsTrue(result.Result.Length > 0);
         }
     }
 }

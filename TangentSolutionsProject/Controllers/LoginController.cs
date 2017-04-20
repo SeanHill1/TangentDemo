@@ -28,17 +28,22 @@ namespace TangentSolutionsProject.Controllers
             ////Set up the data for the HttpClient to POST
             //var uri = new Uri("http://userservice.staging.tangentmicroservices.com:80/api-token-auth/");
 
-
+            
             Client client = new Client();
             try
             {
-                await client.getToken(user);
+                if (Session["token"] == null)
+                {
+                    string token = await client.getToken(user);
+                    Session["token"] = token;
+                }
+                return RedirectToAction("Index", "Home");
             }
             catch(Exception e)
             {
                 throw e;
             }
-            return View();
+            
         }
     }
 
