@@ -1,23 +1,47 @@
 ﻿@*Page for viewing projects and tasks*@
 @using TangentSolutionsProject.Models
-
 @model List<ProjectModel>
 @{
     ViewBag.Title = "Index";
+
 }
 
-<table>
 
-    @foreach (ProjectModel objUser in Model)
-    {
-        <tr>
-            <td>@objUser.title</td>
-            <td>@objUser.description</td>
-            <td>@objUser.start_date</td>
-            <td>@objUser.end_date</td>
-            <td>@objUser.is_billable</td>
-            <td>@objUser.is_active</td>
-            <td>@objUser.end_date</td>
-        </tr>
-    }
-</table>
+<div id="cardTable" class="projectsTable">
+    <table class="col-md-12 table-bordered table-striped table-condensed cf">
+        <thead class="cf">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Is Billable</th>
+                <th>Is Active</th>
+                <th>Created On</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ProjectModel objUser in Model)
+            {
+                <tr>
+                    <td dataTitle="Title">@objUser.title</td>
+                    <td dataTitle="Description">@objUser.description</td>
+                    <td dataTitle="Start Date">@objUser.start_date</td>
+                    <td dataTitle="End Date">@objUser.end_date</td>
+                    <td dataTitle="Is Billable">@objUser.is_billable</td>
+                    <td dataTitle="Is Active">@objUser.is_active</td>
+                    <td dataTitle="Created On">@objUser.end_date</td>
+                    <td></td>
+</tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<script>
+ 
+</script>

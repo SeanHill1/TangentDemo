@@ -41,3 +41,51 @@ textarea {
 .signInButton{
     margin-top: 42px;
 }
+
+.projectsTable{
+    max-height: 300px;
+    overflow-y: scroll;
+}
+/*Responsive change stop card view*/
+@media only screen and (max-width: 900px) {
+    
+    /* Force table to not be like tables anymore */
+	#cardTable table, 
+	#cardTable thead, 
+	#cardTable tbody, 
+	#cardTable th, 
+	#cardTable td, 
+	#cardTable tr { 
+		display: block; 
+	}
+ 
+	/* Hide headers */
+	#cardTable thead tr { 
+		display:none;
+	}
+ 
+	#cardTable tr { border: 1px solid #ccc; }
+ 
+	#cardTable td { 
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+		white-space: normal;
+		text-align:left;
+	}
+ 
+	#cardTable td:before { 
+		position: absolute;
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		text-align:left;
+		font-weight: bold;
+	}
+ 
+	/*Labels*/
+	#cardTable td:before { content: attr(dataTitle); }
+}

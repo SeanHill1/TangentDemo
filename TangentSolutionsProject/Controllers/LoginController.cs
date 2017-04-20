@@ -30,6 +30,7 @@ namespace TangentSolutionsProject.Controllers
 
             
             Client client = new Client();
+          
             try
             {
                 if (Session["token"] == null)
