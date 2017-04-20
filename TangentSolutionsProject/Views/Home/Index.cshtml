@@ -33,15 +33,54 @@
                     <td dataTitle="Is Billable">@objUser.is_billable</td>
                     <td dataTitle="Is Active">@objUser.is_active</td>
                     <td dataTitle="Created On">@objUser.end_date</td>
-                    <td></td>
+                    <td><button onclick="changeTaskView(@objUser.pk)"></button></td>
 </tr>
             }
         </tbody>
     </table>
 </div>
 
+<table class="col-md-12 table-bordered table-striped table-condensed cf">
+    <thead class="cf">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Due Date</th>
+            <th>Estimated Hours</th>
+        </tr>
+    </thead>
+    <tbody id="tasks">
+       
+    </tbody>
+</table>
 
 
 <script>
- 
+    var model = @Html.Raw(Json.Encode(Model));
+    var current = null;
+
+    function changeTaskView(user){
+
+        current = getFromPk(user);
+
+        console.log(current)
+        var html = "";
+        for(var i = 0; i < current.task_set.length; i++){
+            console.log(current.task_set[i].title);
+           
+            html += "<tr>";
+            html += "<td dataTitle='Title'>" + current.task_set[i].title +"</td>";
+            html += "<td dataTitle='Due Date'>" + new Date(parseInt(current.task_set[i].due_date.substr(6))) + "</td>";
+            html += "<td dataTitle='Estimated Hours'>"+current.task_set[i].estimated_hours+"</td>";
+            html += "</tr>";
+        }
+        document.getElementById("tasks").innerHTML = html;
+    }
+
+    function getFromPk(pk){
+        for(var i = 0; i < model.length; i++){
+            if(model[i].pk == pk)
+                return model[i];
+        }
+    }
 </script>

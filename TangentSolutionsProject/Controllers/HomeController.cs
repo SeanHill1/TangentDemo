@@ -43,9 +43,5 @@ namespace TangentSolutionsProject.Controllers
             return View();
         }
 
-        public void setIndex(int pk)
-        {
-            ViewBag.index = pk;
-        }
     }
 }
