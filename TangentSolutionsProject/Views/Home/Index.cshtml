@@ -131,7 +131,8 @@
     }
 
     function saveEdit(){
-        var temp = current;
+        
+        var temp = jQuery.extend(true, {}, current);
         //some jQuery
 
         temp.title = $("#title").val();
@@ -140,10 +141,18 @@
         temp.end_date = $("#endDate").val();
         temp.is_billable = $("#isBillable").is(':checked');
         temp.is_active = $("#isActive").is(':checked');
-        console.log(temp);
-
-        $.post("/Home/Edit", function(data, status){
-            alert("Data: " + data + "\nStatus: " + status);
+       
+        $.post("/Home/Edit",temp, function(data, status){
+            console.log(data);
+            if(data == true){
+                current.title = $("#title").val();
+                current.description = $("#description").val();
+                current.start_date = $("#startDate").val();
+                current.end_date = $("#endDate").val();
+                current.is_billable = $("#isBillable").is(':checked');
+                current.is_active = $("#isActive").is(':checked');
+            }
+            cancelEdit();
         });
     }
 

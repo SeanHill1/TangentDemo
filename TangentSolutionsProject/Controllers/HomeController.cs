@@ -11,7 +11,7 @@ namespace TangentSolutionsProject.Controllers
 {
     public class HomeController : Controller
     {
-       
+        Client client = new Client();
         // GET: Home
         public async Task<ActionResult> Index()
         {
@@ -20,7 +20,7 @@ namespace TangentSolutionsProject.Controllers
             if (Session["token"] == null)
                 return RedirectToAction("Login", "Login");
 
-            Client client = new Client();
+            
             
             string token = (string)Session["token"];
 
@@ -30,11 +30,16 @@ namespace TangentSolutionsProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(ProjectModel data)
+        public async Task<Boolean> Edit(ProjectModel data)
         {
             Console.WriteLine(data);
-
-            return View();
+            try { 
+            return await client.updateProject((string)Session["token"], data);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
 
     }

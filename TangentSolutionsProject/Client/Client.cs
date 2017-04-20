@@ -82,6 +82,31 @@ namespace TangentSolutionsProject.Clients
             }
 
         }
+    
+
+    public async Task<bool> updateProject(string token, ProjectModel proj)
+    {
+
+
+        try
+        {
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Token " + token);
+                var httpContent = new StringContent(new JavaScriptSerializer().Serialize(proj), Encoding.UTF8, "application/json");
+                var httpResponse = await client.PutAsync("http://projectservice.staging.tangentmicroservices.com:80/api/v1/projects/" + proj.pk + "/", httpContent);
+
+            if (httpResponse.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+            else throw new Exception("Update Failed");
+
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+
     }
+}
 }
     
