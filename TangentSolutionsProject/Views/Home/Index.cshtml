@@ -2,12 +2,13 @@
 @using TangentSolutionsProject.Models
 @model List<ProjectModel>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Projects";
 
 }
 
-
+<h1>@ViewBag.Title</h1>
 <div id="cardTable" class="projectsTable">
+  
     <table class="col-md-12 table-borderedtable-condensed cf">
         <thead class="cf">
         <thead >
@@ -18,7 +19,6 @@
                 <th>End Date</th>
                 <th>Is Billable</th>
                 <th>Is Active</th>
-                <th>Created On</th>
             </tr>
         </thead>
         <tbody>
@@ -50,6 +50,7 @@
 <script>
     //Waay too much DOM stuff, but whatever, mostly pure js
     var model = @Html.Raw(Json.Encode(Model));
+    changeTaskView(model[0].pk);
     var current = null;
     var edit = false;
     function changeTaskView(user){
@@ -64,6 +65,7 @@
         var html = "<div class='row'>";
         html += "<h2 class='projectHeader'>Selected Project: " + current.title + "</h2>";
         html +="<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='editProject()'>Edit</button><button class='btn btn-warning'>Delete</button></div></div>"
+        html += "<h3>Tasks</h3>";
         if(current.task_set.length > 0){
         
         html += "<table class='col-md-12 table-bordered table-striped table-condensed cf'>";
@@ -86,6 +88,9 @@
         }
         html+='</tbody>';
         html+='</table>';
+        }
+        else{
+            html+='<h5>This project currently has no tasks</h5>';
         }
         document.getElementById("tasksContainer").innerHTML = html;
 
