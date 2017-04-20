@@ -70,6 +70,16 @@ textarea {
 .tableDiv{
 margin-bottom: 50px;
 }
+
+.editProject{
+    margin: 23px;
+    float:right;
+}
+
+.projectHeader{
+        max-width: 470px;
+    display: inline-block;
+}
 /*Responsive change stop card view*/
 @media only screen and (max-width: 900px) {
     

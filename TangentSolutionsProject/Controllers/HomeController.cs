@@ -29,16 +29,10 @@ namespace TangentSolutionsProject.Controllers
             return View(projects);
         }
 
-        public ActionResult ViewTasks()
+        [HttpPost]
+        public ActionResult Edit(ProjectModel data)
         {
-            if (Session["token"] == null)
-                return RedirectToAction("Login", "Login");
-
-            //Client client = new Client();
-
-            //string token = (string)Session["token"];
-
-            //var projects = await client.getProjects(token);
+            Console.WriteLine(data);
 
             return View();
         }

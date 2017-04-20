@@ -8,7 +8,7 @@
 
 
 <div id="cardTable" class="projectsTable">
-    <table class="projectsTable col-md-12 table-borderedtable-condensed cf">
+    <table class="col-md-12 table-borderedtable-condensed cf">
         <thead class="cf">
         <thead >
             <tr>
@@ -22,18 +22,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (ProjectModel objUser in Model)
-            {
-                <tr id="project_@objUser.pk" class="clickableRow" onclick="changeTaskView(@objUser.pk)">
-                    <td dataTitle="Title">@objUser.title</td>
-                    <td dataTitle="Description">@objUser.description</td>
-                    <td dataTitle="Start Date">@objUser.start_date</td>
-                    <td dataTitle="End Date">@objUser.end_date</td>
-                    <td dataTitle="Is Billable">@objUser.is_billable</td>
-                    <td dataTitle="Is Active">@objUser.is_active</td>
-                    <td dataTitle="Created On">@objUser.end_date</td>
-</tr>
-            }
+            
+                @foreach (ProjectModel objUser in Model)
+            {       
+                    <tr id="project_@objUser.pk" class="clickableRow" onclick="changeTaskView(@objUser.pk)">
+                        <td id="projectTitle_@objUser.pk" dataTitle="Title">@objUser.title</td>
+                        <td id="projectDescription_@objUser.pk" dataTitle="Description">@objUser.description</td>
+                        <td id="projectStartDate_@objUser.pk" dataTitle="Start Date">@objUser.start_date</td>
+                        <td id="projectEndDate_@objUser.pk" dataTitle="End Date">@objUser.end_date</td>
+                        <td id="projectIsBillable_@objUser.pk" dataTitle="Is Billable">@objUser.is_billable</td>
+                        <td id="projectIsActive_@objUser.pk" dataTitle="Is Active">@objUser.is_active</td>
+                    </tr>
+                }
+            
         </tbody>
     </table>
 </div>
@@ -44,27 +45,15 @@
 
 
 
-<!-- Modal -->
-<div id="editProject" class="modal fade" role="dialog">
-    <div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit Project</h4>
-            </div>
-            
-        </div>
-
-    </div>
-</div>
 
 <script>
+    //Waay too much DOM stuff, but whatever, mostly pure js
     var model = @Html.Raw(Json.Encode(Model));
     var current = null;
-
+    var edit = false;
     function changeTaskView(user){
+        if(edit) return;
         var oldId = null;
         if(current != null)
         oldId = current.pk;
@@ -72,9 +61,9 @@
         current = getFromPk(user);
         
         //setup and update dom
-        var html = "";
-        html += "<h2>Selected Project: " + current.title + "</h2>";
-        html +="<div class='editProject'><button class='btn btn-primary' data-toggle='modal' data-target='#editProject'>Edit</button><button class='btn btn-warning'>Delete</button></div>"
+        var html = "<div class='row'>";
+        html += "<h2 class='projectHeader'>Selected Project: " + current.title + "</h2>";
+        html +="<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='editProject()'>Edit</button><button class='btn btn-warning'>Delete</button></div></div>"
         if(current.task_set.length > 0){
         
         html += "<table class='col-md-12 table-bordered table-striped table-condensed cf'>";
@@ -104,6 +93,58 @@
         if(oldId != null)
             document.getElementById("project_"+oldId).className = "clickableRow";
         document.getElementById("project_"+current.pk).className = "clickableRow orangeBorder";
+    }
+
+    //Replace line with input boxes
+    function editProject(){
+        edit = true;
+        document.getElementById("editButtons").innerHTML = "<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='saveEdit()'>Save</button><button class='btn btn-warning' onclick='cancelEdit()'>Cancel</button>";
+        if(current != null){
+            var title = current.title;
+            var description = current.description;
+            document.getElementById("projectTitle_"+current.pk).innerHTML = "<input type='text' Value='"+title+"' id='title'/>";
+            document.getElementById("projectDescription_"+current.pk).innerHTML = "<input type='text' Value='"+description+"' id ='description'/>";
+            var startDate = current.start_date;
+            document.getElementById("projectStartDate_"+current.pk).innerHTML = "<input type='date' Value='"+startDate+"' id='startDate'/>";
+            var endDate = current.end_date;
+            document.getElementById("projectEndDate_"+current.pk).innerHTML = "<input type='date' Value='"+endDate+"' id='endDate'/>";
+            var isBillable = current.is_billable;
+            console.log(isBillable);
+            document.getElementById("projectIsBillable_"+current.pk).innerHTML = "<input type='checkbox' " + (isBillable ? "Checked": "") +" id='isBillable'/>";
+            var isActive =  current.is_active;
+            document.getElementById("projectIsActive_"+current.pk).innerHTML = "<input type='checkbox' "+ (isActive ? "Checked": "") + " id='isActive'/>";
+        }
+    }
+
+    function cancelEdit(){
+        edit = false;
+
+        if(current != null){
+            document.getElementById("editButtons").innerHTML = "<button class='btn btn-primary' onclick='editProject()'>Edit</button><button class='btn btn-warning'>Delete</button>";
+            document.getElementById("projectTitle_"+current.pk).innerHTML = current.title;
+            document.getElementById("projectDescription_"+current.pk).innerHTML = current.description;
+            document.getElementById("projectStartDate_"+current.pk).innerHTML = current.start_date;
+            document.getElementById("projectEndDate_"+current.pk).innerHTML = current.end_date;
+            document.getElementById("projectIsBillable_"+current.pk).innerHTML = current.is_billable;
+            document.getElementById("projectIsActive_"+current.pk).innerHTML = current.is_active;
+        }
+    }
+
+    function saveEdit(){
+        var temp = current;
+        //some jQuery
+
+        temp.title = $("#title").val();
+        temp.description = $("#description").val();
+        temp.start_date = $("#startDate").val();
+        temp.end_date = $("#endDate").val();
+        temp.is_billable = $("#isBillable").is(':checked');
+        temp.is_active = $("#isActive").is(':checked');
+        console.log(temp);
+
+        $.post("/Home/Edit", function(data, status){
+            alert("Data: " + data + "\nStatus: " + status);
+        });
     }
 
     function getFromPk(pk){
