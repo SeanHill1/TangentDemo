@@ -107,6 +107,29 @@ namespace TangentSolutionsProject.Clients
         }
 
     }
-}
+
+        public async Task<bool> deleteProject(string token, int pk)
+        {
+
+
+            try
+            {
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Token " + token);
+                var httpResponse = await client.DeleteAsync("http://projectservice.staging.tangentmicroservices.com:80/api/v1/projects/" + pk + "/");
+
+                if (httpResponse.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    return true;
+                }
+                else throw new Exception("Delete Failed");
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
+    }
 }
     

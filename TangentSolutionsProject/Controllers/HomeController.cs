@@ -42,5 +42,19 @@ namespace TangentSolutionsProject.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<Boolean> DeleteProject(int pk)
+        {
+            
+            try
+            {
+                return await client.deleteProject((string)Session["token"], pk);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }

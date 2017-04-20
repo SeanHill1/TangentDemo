@@ -64,7 +64,7 @@
         //setup and update dom
         var html = "<div class='row'>";
         html += "<h2 class='projectHeader'>Selected Project: " + current.title + "</h2>";
-        html +="<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='editProject()'>Edit</button><button class='btn btn-warning'>Delete</button></div></div>"
+        html +="<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='editProject()'>Edit</button><button class='btn btn-warning' onclick='deleteProject()'>Delete</button></div></div>"
         html += "<h3>Tasks</h3>";
         if(current.task_set.length > 0){
         
@@ -158,6 +158,18 @@
                 current.is_active = $("#isActive").is(':checked');
             }
             cancelEdit();
+        });
+    }
+
+    function deleteProject(){
+        
+       
+        $.post("/Home/DeleteProject",current.pk, function(data, status){
+            console.log(data);
+            if(data == true){
+                document.getElementById("project_"+current.pk).remove();
+            }
+            
         });
     }
 
