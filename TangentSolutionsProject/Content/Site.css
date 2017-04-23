@@ -65,6 +65,7 @@ textarea {
 .orangeBorder{
     border-top: 1px solid orange;
     border-bottom: 1px solid orange;
+    background-color: blanchedalmond;
 }
 
 .tableDiv{

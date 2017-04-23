@@ -50,8 +50,8 @@
 <script>
     //Waay too much DOM stuff, but whatever, mostly pure js
     var model = @Html.Raw(Json.Encode(Model));
-    changeTaskView(model[0].pk);
     var current = null;
+    changeTaskView(model[0].pk);
     var edit = false;
     function changeTaskView(user){
         if(edit) return;
@@ -163,20 +163,6 @@
 
     function deleteProject(){
         
-        //$.ajax({
-        //    url: '/Home/Delete',
-        //    method: 'DELETE',
-        //    contentType: 'application/json',
-        //    success: function(result) {
-        //        console.log(result);
-        //        if(data == true){
-        //            document.getElementById("project_"+current.pk).remove();
-        //        }
-        //    },
-        //    error: function(request,msg,error) {
-        //        // handle failure
-        //    }
-        //});
        
         $.post("/Home/DeleteProject",{ pk : current.pk }, function(data, status){
             console.log(data);
