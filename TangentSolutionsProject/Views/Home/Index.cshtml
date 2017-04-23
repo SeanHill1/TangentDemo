@@ -21,7 +21,7 @@
                 <th>Is Active</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="projectTableBody">
             
                 @foreach (ProjectModel objUser in Model)
             {       
@@ -48,7 +48,6 @@
 
 
 <script>
-    //Waay too much DOM stuff, but whatever, mostly pure js
     var model = @Html.Raw(Json.Encode(Model));
     var current = null;
     changeTaskView(model[0].pk);
@@ -60,14 +59,14 @@
         oldId = current.pk;
         //Get current selected
         current = getFromPk(user);
-        
+
         //setup and update dom
         var html = "<div class='row'>";
         html += "<h2 class='projectHeader'>Selected Project: " + current.title + "</h2>";
-        html +="<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='editProject()'>Edit</button><button class='btn btn-warning' onclick='deleteProject()'>Delete</button></div></div>"
+        html +="<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='addProject()'>Add</button><button class='btn btn-primary' onclick='editProject()'>Edit</button><button class='btn btn-warning' onclick='deleteProject()'>Delete</button></div></div>"
         html += "<h3>Tasks</h3>";
         if(current.task_set.length > 0){
-        
+
         html += "<table class='col-md-12 table-bordered table-striped table-condensed cf'>";
         html+='<thead class="cf">';
         html+='<thead>';
@@ -78,11 +77,11 @@
         html+='</tr>';
         html+='</thead>';
         html+='<tbody>';
-        
+
         for(var i = 0; i < current.task_set.length; i++){
             html += "<tr>";
             html += "<td dataTitle='Title'>" + current.task_set[i].title +"</td>";
-            html += "<td dataTitle='Due Date'>" + new Date(parseInt(current.task_set[i].due_date.substr(6))) + "</td>";
+            html += "<td dataTitle='Due Date'>" + new Date(parseInt(current.task_set[i].due_date.substr(6))).toLocaleDateString() + "</td>";
             html += "<td dataTitle='Estimated Hours'>"+current.task_set[i].estimated_hours+"</td>";
             html += "</tr>";
         }
@@ -121,11 +120,78 @@
         }
     }
 
+    function addProject(){
+        edit = true;
+        document.getElementById("editButtons").innerHTML = "<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='saveCreate()'>Save</button><button class='btn btn-warning' onclick='cancelCreate()'>Cancel</button>";
+                    var html =
+                    '<tr id="project_new" class="clickableRow orangeBorder">'+
+                        '<td id="projectTitle_new" dataTitle="Title" required><input type="text" id="title"/></td>'+
+                       '<td id="projectDescription_new" dataTitle="Description" required><input type="text" id ="description"/></td>'+
+        '<td id="projectStartDate_new" dataTitle="Start Date" required><input type="date" id="startDate"/></td>'+
+        '<td id="projectEndDate_new" dataTitle="End Date"><input type="date" id="endDate"/></td>'+
+        '<td id="projectIsBillable_new" dataTitle="Is Billable"><input type="checkbox" id="isBillable"/></td>'+
+        '<td id="projectIsActive_new" dataTitle="Is Active"><input type="checkbox" id="isActive"/></td>'+
+        '</tr>';
+
+                    $("#projectTableBody").append(html);
+                    $("#cardTable").scrollTop($("#cardTable")[0].scrollHeight);
+    }
+
+    function cancelCreate(){
+        edit = false;
+        $("#project_new").remove();
+        document.getElementById("editButtons").innerHTML = "<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='addProject()'>Add</button><button class='btn btn-primary' onclick='editProject()'>Edit</button><button class='btn btn-warning' onclick='deleteProject()'>Delete</button></div></div>";
+    }
+
+    function saveCreate(){
+        edit = false;
+        
+        var temp = {};
+        temp.title = $("#title").val();
+        temp.description = $("#description").val();
+        temp.start_date = $("#startDate").val();
+        temp.end_date = $("#endDate").val();
+        temp.is_billable = $("#isBillable").is(':checked');
+        temp.is_active = $("#isActive").is(':checked');
+
+        $.post("/Home/CreateProject",temp, function(data, status){
+            console.log(data.pk);
+            if(data == true){
+                current.title = $("#title").val();
+                current.description = $("#description").val();
+                current.start_date = $("#startDate").val();
+                current.end_date = $("#endDate").val();
+                current.is_billable = $("#isBillable").is(':checked');
+                current.is_active = $("#isActive").is(':checked');
+            }
+            
+        });
+
+        document.getElementById("editButtons").innerHTML = "<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='addProject()'>Add</button><button class='btn btn-primary' onclick='editProject()'>Edit</button><button class='btn btn-warning' onclick='deleteProject()'>Delete</button></div></div>";
+        temp.pk = 665;
+        model.push(temp);
+        $("#project_new").prop('id', "project_"+temp.pk);
+        $("#projectTitle_new").prop('id', "projectTitle_"+temp.pk);
+        $("#projectDescription_new").prop('id', "projectDescription_"+temp.pk);
+        $("#projectStartDate_new").prop('id', "projectStartDate_"+temp.pk);
+        $("#projectEndDate_new").prop('id', "projectEndDate_"+temp.pk);
+        $("#projectIsBillable_new").prop('id', "projectIsBillable_"+temp.pk);
+        $("#projectIsActive_new").prop('id', "projectIsActive_"+temp.pk);
+
+        document.getElementById("projectTitle_"+temp.pk).innerHTML = temp.title;
+        document.getElementById("projectDescription_"+temp.pk).innerHTML = temp.description;
+        document.getElementById("projectStartDate_"+temp.pk).innerHTML = temp.start_date;
+        document.getElementById("projectEndDate_"+temp.pk).innerHTML = temp.end_date;
+        document.getElementById("projectIsBillable_"+temp.pk).innerHTML = temp.is_billable;
+        document.getElementById("projectIsActive_"+temp.pk).innerHTML = temp.is_active;
+        changeTaskView(temp.pk);
+    }
+
     function cancelEdit(){
         edit = false;
 
         if(current != null){
-            document.getElementById("editButtons").innerHTML = "<button class='btn btn-primary' onclick='editProject()'>Edit</button><button class='btn btn-warning'>Delete</button>";
+            document.getElementById("editButtons").innerHTML = "<div id='editButtons' class='editProject'><button class='btn btn-primary' onclick='saveEdit()'>Save</button><button class='btn btn-warning' onclick='cancelEdit()'>Cancel</button>";
             document.getElementById("projectTitle_"+current.pk).innerHTML = current.title;
             document.getElementById("projectDescription_"+current.pk).innerHTML = current.description;
             document.getElementById("projectStartDate_"+current.pk).innerHTML = current.start_date;
@@ -136,7 +202,7 @@
     }
 
     function saveEdit(){
-        
+
         var temp = jQuery.extend(true, {}, current);
         //some jQuery
 
@@ -146,7 +212,7 @@
         temp.end_date = $("#endDate").val();
         temp.is_billable = $("#isBillable").is(':checked');
         temp.is_active = $("#isActive").is(':checked');
-       
+
         $.post("/Home/Edit",temp, function(data, status){
             console.log(data);
             if(data == true){
@@ -162,14 +228,14 @@
     }
 
     function deleteProject(){
-        
-       
+
+
         $.post("/Home/DeleteProject",{ pk : current.pk }, function(data, status){
             console.log(data);
             if(data == true){
                 document.getElementById("project_"+current.pk).remove();
             }
-            
+
         });
     }
 

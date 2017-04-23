@@ -48,7 +48,9 @@ namespace TangentSolutionsProject.Controllers
         {
             try
             {
-                return await client.deleteProject((string)Session["token"], pk);
+                var temp = await client.deleteProject((string)Session["token"], pk);
+                return temp;
+
             }
             catch (Exception e)
             {
@@ -57,11 +59,11 @@ namespace TangentSolutionsProject.Controllers
         }
 
         [HttpPost]
-        public async Task<Boolean> CreateProject(int pk)
+        public async Task<ProjectModel> CreateProject(ProjectCreateModel project)
         {
             try
             {
-                return await client.deleteProject((string)Session["token"], pk);
+                return await client.createProject((string)Session["token"], project);
             }
             catch (Exception e)
             {
