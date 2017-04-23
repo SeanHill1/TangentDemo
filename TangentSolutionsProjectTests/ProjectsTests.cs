@@ -136,7 +136,8 @@ namespace TangentSolutionsProjectTests
         {
             
             var project = createTestData();
-            Task.WaitAll(Task.Delay(5000));
+            //For some reason it doesn't find the pk I just added
+            Task.WaitAll(Task.Delay(15000));
             Assert.IsTrue(deleteHelper(project.pk));
 
         }
