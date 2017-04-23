@@ -47,6 +47,9 @@ textarea {
     border: 1px solid black;
 }
 
+.inputError{
+    border: 1px solid red;
+}
 .projectsTable{
     max-height: 420px;
     overflow-y: scroll;

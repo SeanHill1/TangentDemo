@@ -149,7 +149,7 @@
     }
 
     function saveCreate(){
-        edit = false;
+       
         
         var temp = {};
         temp.title = $("#title").val();
@@ -158,6 +158,7 @@
         temp.end_date = $("#endDate").val();
         temp.is_billable = $("#isBillable").is(':checked');
         temp.is_active = $("#isActive").is(':checked');
+        if(!checkInput(temp)) return;
 
         $.post("/Home/CreateProject",temp, function(resp, status){
             
@@ -180,6 +181,7 @@
                 document.getElementById("projectEndDate_"+temp.pk).innerHTML = temp.end_date;
                 document.getElementById("projectIsBillable_"+temp.pk).innerHTML = temp.is_billable;
                 document.getElementById("projectIsActive_"+temp.pk).innerHTML = temp.is_active;
+                edit = false;
                 changeTaskView(temp.pk);
             }
             
@@ -204,6 +206,7 @@
 
     function saveEdit(){
         if(window.confirm("Are you sure you want to keep the changes to "+ current.title)){
+            if(!checkInput(current)) return;
             var temp = jQuery.extend(true, {}, current);
             //some jQuery
 
@@ -248,5 +251,40 @@
             if(model[i].pk == pk)
                 return model[i];
         }
+    }
+
+    function checkInput(proj){
+        if(proj.title != "" && proj.description != "" && proj.start_date != null)
+            return true;
+        else {
+            highlightInputs();
+            $("input").keydown(function(){
+                highlightInputs();
+            });
+            $("#startDate").click(function(){
+                highlightInputs();
+            });
+            window.alert("Please fill in all required fields. These are title, description and start date.");
+            return false;
+        }
+    }
+   
+    
+
+    function highlightInputs(){
+        if($("#title").val() == "")
+            $("#title").addClass("inputError");
+        else
+            $("#title").removeClass("inputError");
+
+        if($("#description").val() == "")
+            $("#description").addClass("inputError");
+        else
+            $("#description").removeClass("inputError");
+
+        if(!$("#startDate").val())
+            $("#startDate").addClass("inputError");
+        else
+            $("#startDate").removeClass("inputError");
     }
 </script>
