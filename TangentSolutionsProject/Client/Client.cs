@@ -117,7 +117,7 @@ namespace TangentSolutionsProject.Clients
                 client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Token " + token);
                 var httpResponse = await client.DeleteAsync("http://projectservice.staging.tangentmicroservices.com:80/api/v1/projects/" + pk + "/");
 
-                if (httpResponse.StatusCode == System.Net.HttpStatusCode.OK)
+                if (httpResponse.IsSuccessStatusCode)
                 {
                     return true;
                 }

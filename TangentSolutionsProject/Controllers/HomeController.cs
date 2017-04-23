@@ -33,10 +33,11 @@ namespace TangentSolutionsProject.Controllers
         public async Task<Boolean> Edit(ProjectModel data)
         {
             Console.WriteLine(data);
-            try { 
-            return await client.updateProject((string)Session["token"], data);
+            try
+            {
+                return await client.updateProject((string)Session["token"], data);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw e;
             }
@@ -45,7 +46,7 @@ namespace TangentSolutionsProject.Controllers
         [HttpPost]
         public async Task<Boolean> DeleteProject(int pk)
         {
-            
+            Console.WriteLine("Yolo");
             try
             {
                 return await client.deleteProject((string)Session["token"], pk);

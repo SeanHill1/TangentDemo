@@ -163,8 +163,22 @@
 
     function deleteProject(){
         
+        //$.ajax({
+        //    url: '/Home/Delete',
+        //    method: 'DELETE',
+        //    contentType: 'application/json',
+        //    success: function(result) {
+        //        console.log(result);
+        //        if(data == true){
+        //            document.getElementById("project_"+current.pk).remove();
+        //        }
+        //    },
+        //    error: function(request,msg,error) {
+        //        // handle failure
+        //    }
+        //});
        
-        $.post("/Home/DeleteProject",current.pk, function(data, status){
+        $.post("/Home/DeleteProject",{ pk : current.pk }, function(data, status){
             console.log(data);
             if(data == true){
                 document.getElementById("project_"+current.pk).remove();
