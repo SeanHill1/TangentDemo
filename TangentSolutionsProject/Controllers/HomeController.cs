@@ -59,7 +59,7 @@ namespace TangentSolutionsProject.Controllers
         }
 
         [HttpPost]
-        public async Task<ProjectModel> CreateProject(ProjectCreateModel project)
+        public async Task<String> CreateProject(ProjectCreateModel project)
         {
             try
             {

@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TangentSolutionsProject.Clients;
 using System.Threading.Tasks;
 using TangentSolutionsProject.Models;
+using System.Web.Script.Serialization;
 
 namespace TangentSolutionsProjectTests
 {
@@ -75,7 +76,7 @@ namespace TangentSolutionsProjectTests
 
             var project = client.createProject(getToken(), temp);
             Task.WaitAll(project);
-            return project.Result;
+            return new JavaScriptSerializer().Deserialize<ProjectModel>(project.Result);
         }
         /// <summary>
         /// Helper method for tests

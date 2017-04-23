@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: floralwhite !important;
 }
 
 footer{
@@ -42,9 +43,14 @@ textarea {
     margin-top: 42px;
 }
 
+.blackBorder{
+    border: 1px solid black;
+}
+
 .projectsTable{
-    max-height: 300px;
+    max-height: 420px;
     overflow-y: scroll;
+    border: 1px solid black;
 }
 
 .clickableRow:hover{

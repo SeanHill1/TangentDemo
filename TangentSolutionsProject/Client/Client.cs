@@ -131,7 +131,7 @@ namespace TangentSolutionsProject.Clients
 
         }
 
-        public async Task<ProjectModel> createProject(string token, ProjectCreateModel project)
+        public async Task<String> createProject(string token, ProjectCreateModel project)
         {
             Uri uri = new Uri("http://projectservice.staging.tangentmicroservices.com:80/api/v1/projects/");
             try
@@ -145,8 +145,8 @@ namespace TangentSolutionsProject.Clients
                 if (httpResponse.Content != null)
                 {
                     var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                    var response = new JavaScriptSerializer().Deserialize<ProjectModel>(responseContent);
-                    return response;
+                    //var response = new JavaScriptSerializer().Deserialize<ProjectModel>(responseContent);
+                    return responseContent;
                 }
                 else throw new Exception("No response");
 
