@@ -130,6 +130,33 @@ namespace TangentSolutionsProject.Clients
             }
 
         }
+
+        public async Task<ProjectModel> createProject(string token, ProjectCreateModel project)
+        {
+            Uri uri = new Uri("http://projectservice.staging.tangentmicroservices.com:80/api/v1/projects/");
+            try
+            {
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Token " + token);
+                var jsonProj = new JavaScriptSerializer().Serialize(project);
+                var httpContent = new StringContent(jsonProj, Encoding.UTF8, "application/json");
+
+                var httpResponse = await client.PostAsync(uri, httpContent);
+
+                if (httpResponse.Content != null)
+                {
+                    var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                    var response = new JavaScriptSerializer().Deserialize<ProjectModel>(responseContent);
+                    return response;
+                }
+                else throw new Exception("No response");
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
     }
 }
     

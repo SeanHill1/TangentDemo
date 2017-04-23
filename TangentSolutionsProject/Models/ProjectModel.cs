@@ -18,4 +18,15 @@ namespace TangentSolutionsProject.Models
         public List<object> resource_set { get; set; }
 
     }
+
+    public class ProjectCreateModel
+    {
+        public string title { get; set; }
+        public string description { get; set; }
+        public string start_date { get; set; }
+        public string end_date { get; set; }
+        public bool is_billable { get; set; }
+        public bool is_active { get; set; }
+
+    }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TangentSolutionsProject.Clients;
 using System.Threading.Tasks;
+using TangentSolutionsProject.Models;
 
 namespace TangentSolutionsProjectTests
 {
@@ -39,11 +40,12 @@ namespace TangentSolutionsProjectTests
         // public void MyTestCleanup() { }
         //
         #endregion
-
-        [TestMethod]
-        public void getProjectsData()
+            /// <summary>
+            /// Helper method for tests
+            /// </summary>
+            /// <returns></returns>
+        private string getToken()
         {
-            //Make sure the token is in memory
             var gotToken = client.getToken(
                     new TangentSolutionsProject.Models.LoginModel()
                     {
@@ -51,9 +53,48 @@ namespace TangentSolutionsProjectTests
                         password = "tangent"
                     });
             Task.WaitAll(gotToken);
+            return gotToken.Result;
+        }
 
+        /// <summary>
+        /// Helper method for tests
+        /// </summary>
+        /// <returns></returns>
+        private ProjectModel createTestData()
+        {
+            //Fake data
+            ProjectCreateModel temp = new ProjectCreateModel()
+            {
+                title = "Create Test",
+                description = "Testing create",
+                is_active = true,
+                is_billable = false,
+                start_date = "2017-04-23",
+                end_date = "2017-04-23"
+            };
 
-           var projects = client.getProjects(gotToken.Result);
+            var project = client.createProject(getToken(), temp);
+            Task.WaitAll(project);
+            return project.Result;
+        }
+        /// <summary>
+        /// Helper method for tests
+        /// </summary>
+        /// <returns></returns>
+        private bool deleteHelper(int pk)
+        {
+            
+
+            var success = client.deleteProject(getToken(), pk);
+            Task.WaitAll(success);
+            return success.Result;
+        }
+
+        [TestMethod]
+        public void getProjectsData()
+        {
+
+           var projects = client.getProjects(getToken());
             Task.WaitAll(projects);
 
             Assert.IsNotNull(projects.Result);
@@ -67,6 +108,36 @@ namespace TangentSolutionsProjectTests
             Assert.IsNotNull(projects.Result[0].task_set);
             Assert.IsNotNull(projects.Result[0].resource_set);
             Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public void createProject()
+        {
+
+            var project = createTestData();
+
+            Assert.IsNotNull(project);
+            Assert.IsNotNull(project.pk);
+            Assert.IsNotNull(project.title);
+            Assert.IsNotNull(project.is_active);
+            Assert.IsNotNull(project.is_billable);
+            Assert.IsNotNull(project.start_date);
+            Assert.IsNotNull(project.end_date);
+            Assert.IsNotNull(project.description);
+            Assert.IsNotNull(project.task_set);
+            Assert.IsNotNull(project.resource_set);
+            Assert.IsTrue(true);
+            //deleteHelper(project.pk);
+        }
+
+        [TestMethod]
+        public void deleteProject()
+        {
+            
+            var project = createTestData();
+            Task.WaitAll(Task.Delay(5000));
+            Assert.IsTrue(deleteHelper(project.pk));
+
         }
     }
 }
